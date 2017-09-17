@@ -103,14 +103,28 @@ class BookController {
 
     def createPdfReport(Integer max)
     {
-        params.max = Math.min(max ?: 10, 100)
+       // params.max = Math.min(max ?: 10, 100)
         //[bookInstanceList: Book.list(params), bookInstanceTotal: Book.count()]
 
         println new Date().format('dd-MM-yyyy HH:mm:ss')
 
-        def list =Book.list()
+        def booklist =Book.list()
+        def count = Book.count()
+        println "Book count :"+count
 
-    renderPdf(template: 'renderPdf', model: [bookInstanceList: list]    , filename: "booklistPdf")
+        if(count!=0)
+        {
+          renderPdf(template: 'renderPdf', model: [bookInstanceList: booklist]    , filename: "booklistPdf")
+        }
+        else
+        {
+          flash.message = "No book found!"
+          redirect(action: "list", params: params)   
+        }
+
+         
+ 
+    
 }
 
 
